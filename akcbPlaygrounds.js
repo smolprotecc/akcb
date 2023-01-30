@@ -48,7 +48,7 @@ akcbPlaygrounds = (function() {
     } else {
       n = numberInput.value
     }
-    if (n.match(/\D+/)) { console.log('Non-digit request'); return false }
+    if (n.match && n.match(/\D+/)) { console.log('Non-digit request'); return false }
     
     let datum = await retrieve(n)
     console.log(datum)
