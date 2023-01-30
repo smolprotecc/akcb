@@ -34,10 +34,11 @@
 let glbURI      = 'https://cloudflare-ipfs.com/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
 let metadataURI = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
 	
+let scene;
 
 document.addEventListener("DOMContentLoaded", async function(event) {
   let uri = glbURI.replace('FILENUMBER','6262')
-  let f = await fetch(uri).then((res) => {
+  let asset = await fetch(uri).then((res) => {
     return res.body
   }).then((body) => {
     const reader = body.getReader()
@@ -59,12 +60,16 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   })
   .then((stream) => new Response(stream))
   .then((res) => res.blob())
-  .then((blob) => {
-    console.log(blob)
-    return blob
+  .then((blob) => URL.createObjectURL(blob))
+  .then((url) => {
+     return url
   })
-})
+  
+  console.log(asset)
 	
+  await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb");
+})
+
         const canvas = document.getElementById("renderCanvas"); // Get the canvas element
         const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
         const createScene = function () {
@@ -84,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
             light.intensity = 0.7;
             // Built-in 'sphere' shape.
             const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", 
-                {diameter: 2, segments: 32}, scene);
+                {diameter: 0.3, segments: 32}, scene);
             // Move the sphere upward 1/2 its height
             sphere.position.y = 1;
             // Built-in 'ground' shape.
@@ -92,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
                 {width: 6, height: 6}, scene);
             return scene;
         };
-        const scene = createScene(); //Call the createScene function
+        scene = createScene(); //Call the createScene function
         // Register a render loop to repeatedly render the scene
         engine.runRenderLoop(function () {
                 scene.render();
