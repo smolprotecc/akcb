@@ -32,6 +32,8 @@ akcbBabylon = (function() {
     engine.runRenderLoop(function() {
       scene.render()
     })
+    // handler
+    return scene
   }
   
   let createScene = async function(options) {
