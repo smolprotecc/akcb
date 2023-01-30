@@ -22,6 +22,7 @@
 
         <script src="https://cdn.babylonjs.com/babylon.js"></script>
         <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <script src="akcbBabylon.js"></script>
 
     </head>
 
@@ -37,6 +38,13 @@ let metadataURI = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyH
 let scene;
 
 document.addEventListener("DOMContentLoaded", async function(event) {
+})
+		
+document.addEventListener("DOMContentLoaded", async function(event) {
+   console.log(akcbBabylon)
+  akcbBabylon.setup()
+  akcbBabylon.defaultScene()
+	
   let uri = glbURI.replace('FILENUMBER','6262')
   let asset = await fetch(uri).then((res) => {
     return res.body
