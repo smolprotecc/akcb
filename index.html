@@ -37,7 +37,11 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   scene = await akcbBabylon.defaultScene()
 	
   akcbPlaygrounds.start()
-	
+  let asset = akcbPlaygrounds.update(6262)
+  
+  await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
+
+  /*
   let uri = glbURL.replace('FILENUMBER','6262')
   let asset = await fetch(uri).then((res) => {
     return res.body
@@ -67,8 +71,8 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   })
   
   console.log(asset)
+  */
 	
-  await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb");
 })
 </script>
 </html>
