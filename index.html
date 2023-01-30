@@ -38,7 +38,7 @@ let metadataURI = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyH
 document.addEventListener("DOMContentLoaded", async function(event) {
   let uri = glbURI.replace('FILENUMBER','6262')
   console.log(uri)
-  let f = await fetch(uri, (e) => {
+  let f = await fetch(uri).then((e) => {
 	  console.log(2)
     console.log(e)
   }).then((e) => {
