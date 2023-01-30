@@ -10,9 +10,13 @@ akcbPlaygrounds = (function() {
 
   let raiseEvent = function(target, event, datum) { target.dispatchEvent(new CustomEvent(event, {detail: datum})) }
 
+  let update = function() {
+    raiseEvent(body, events.newAKCBNumber, numberInput.value) 
+  }
+
   let markup = `
     <div id='akcb-hud'>
-    <div id='akcb-hud-number'><input placeholder="6262"></input><div id='akcb-hud-number-go'>go</div></div>
+    <div id='akcb-hud-number'><input placeholder="6262"></input><div id='akcb-hud-number-go' onclick='akcbPlaygrounds.update()'>go</div></div>
     </div>
   `
   let cssRules = `
@@ -106,13 +110,14 @@ akcbPlaygrounds = (function() {
     let numberInput = document.querySelector('#akcb-hud-number input')
     numberInput.addEventListener('keyup', (e) => {
       if (e.code == 'Enter') {
-        raiseEvent(body, events.newAKCBNumber, numberInput.value) 
+        update()
       } else {
         if (numberInput.value.length > 4) {
           numberInput.value = numberInput.value.substring(0, 4)
         }
       }
     })
+    
   }
 
   let start = function() {
@@ -124,5 +129,6 @@ akcbPlaygrounds = (function() {
   return {
     start : start,
     render: render,
+    update: update,
   }
 })()
