@@ -27,7 +27,7 @@ akcbBabylon = (function() {
   
   let defaultScene = async function() {
     // generate scene
-    scene = await createScene()
+    let scene = await createScene()
     // animate
     engine.runRenderLoop(function() {
       scene.render()
