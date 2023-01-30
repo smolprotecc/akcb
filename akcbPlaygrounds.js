@@ -41,14 +41,14 @@ akcbPlaygrounds = (function() {
       .then((url)  => { return url })
   }
 
-  let update = async function() {
+  let update = async function(which) {
     let numberInput = document.querySelector('#akcb-hud-number input')
     let n = numberInput.value
     if (n.match(/\D+/)) {
       console.log('Non-digit request')
       return false
     }
-    let datum = await retrieve(n)
+    let datum = await retrieve(which ? which : n)
     console.log(datum)
 
     raiseEvent(body, events.newAKCBNumber, numberInput.value) 
