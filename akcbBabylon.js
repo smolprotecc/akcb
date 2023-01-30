@@ -87,7 +87,7 @@ akcbBabylon = (function() {
 
     if (dev) {
       // Central sphere for orientation
-      if (true) {
+      if (false) {
         let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 1, segments: 32}, scene);
         sphere.position.y = 1;
       }
