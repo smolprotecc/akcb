@@ -48,7 +48,7 @@ akcbBabylon = (function() {
     let cameraWheelPrecision       = options?.cameraWheelPrecision || 11
     let cameraRangeLowerProximity  = options?.cameraRangeLowerProximity || 5
     let cameraRangeHigherProximity = options?.cameraRangeHigherProximity || 135
-    let cameraStartPosition        = options?.cameraStartPosition || new BABYLON.Vector3(-3.5,4.0,8.5)
+    let cameraStartPosition        = options?.cameraStartPosition || new BABYLON.Vector3(-2.25,2.5,7.0)
     
     // All camera instructions
     let camera = new BABYLON.ArcRotateCamera('viewport', cameraAlpha, cameraBeta, cameraRadius, cameraTarget)
