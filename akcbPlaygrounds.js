@@ -13,8 +13,8 @@ akcbPlaygrounds = (function() {
 
   let raiseEvent = function(target, event, datum) { target.dispatchEvent(new CustomEvent(event, {detail: datum})) }
 
-  let retrieve = function(which) {
-    return fetch(glbURL.replace('FILENUMBER',which))
+  let retrieve = async function(which) {
+    return await fetch(glbURL.replace('FILENUMBER',which))
       .then((res) => res.body)
       .then((body) => {
         const reader = body.getReader()
