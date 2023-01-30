@@ -17,7 +17,22 @@ akcbPlaygrounds = (function() {
     return fetch(glbURL.replace('FILENUMBER',which))
       .then((res) => res.body)
       .then((body) => {
-
+        const reader = body.getReader()
+        return new ReadableStream({
+          start(controller) {
+            return pump()
+            function pump() {
+              return reader.read().then(({done, value}) => {
+                if (done) {
+                  controller.close()
+                  return
+                }
+                controller.enqueue(value)
+                return pump()
+              })
+            }
+          }
+        })
       })
       .then((stream) => new Response(stream))
       .then((res)  => res.blob())
