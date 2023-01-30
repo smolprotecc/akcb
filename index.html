@@ -20,6 +20,7 @@
   <script src="https://cdn.babylonjs.com/babylon.js"></script>
   <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
   <script src="akcbBabylon.js"></script>
+  <script src="akcbPlaygrounds.js"></script>
 </head>
 <body>
   <canvas id="renderCanvas"></canvas>
@@ -34,6 +35,8 @@ let scene;
 document.addEventListener("DOMContentLoaded", async function(event) {
   akcbBabylon.setup()
   scene = await akcbBabylon.defaultScene()
+	
+  akcbPlaygrounds.start()
 	
   let uri = glbURL.replace('FILENUMBER','6262')
   let asset = await fetch(uri).then((res) => {
