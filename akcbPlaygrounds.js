@@ -1,8 +1,11 @@
 
 akcbPlaygrounds = (function() {
-  let CSSIdentifier = 'akcb-playgrounds'
 
   let body; 
+  // Statics
+  let CSSIdentifier = 'akcb-playgrounds'
+  let glbURL        = 'https://cloudflare-ipfs.com/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
+  let metadataURL   = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
 
   let events = {
     newAKCBNumber: 'new-akcb-number',
@@ -10,7 +13,28 @@ akcbPlaygrounds = (function() {
 
   let raiseEvent = function(target, event, datum) { target.dispatchEvent(new CustomEvent(event, {detail: datum})) }
 
-  let update = function() {
+  let retrieve = function(which) {
+    return fetch(glbURL.replace('FILENUMBER',which))
+      .then((res) => res.body)
+      .then((body) => {
+
+      })
+      .then((stream) => new Response(stream))
+      .then((res)  => res.blob())
+      .then((blob) => URL.createObjectURL(blob))
+      .then((url)  => { return url })
+  }
+
+  let update = async function() {
+    let numberInput = document.querySelector('#akcb-hud-number input')
+    let n = numberInput.value
+    if (n.match(/\D+/)) {
+      console.log('Non-digit request')
+      return false
+    }
+    let datum = await retrieve(n)
+    console.log(datum)
+
     raiseEvent(body, events.newAKCBNumber, numberInput.value) 
   }
 
