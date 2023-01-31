@@ -4,9 +4,11 @@ akcbPlaygrounds = (function() {
   let body; 
   // Statics
   let CSSIdentifier = 'akcb-playgrounds'
-  let glbURL        = 'https://cloudflare-ipfs.com/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
-  let metadataURL   = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
-
+  let glbURL        = 'https://ipfs.io/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
+  let metadataURL   = 'https://ipfs.io/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
+  
+  // cloudflare-ipfs.com
+  
   let events = {
     newAKCBNumber: 'new-akcb-number',
   }
