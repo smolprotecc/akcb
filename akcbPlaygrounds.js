@@ -15,12 +15,9 @@ akcbPlaygrounds = (function() {
   let retrieve = async function(which) {
     return await fetch(metadataURL.replace('FILENUMBER', which))
       .then((res)  => res.json())
-      .then(r => {console.log(r); return r})
-      .then((data) => data.animation_url)
-      .then(r => {console.log(r); return r})
+      .then((data) => { console.log(data); return data.animation_url })
       .then((uri)  => fetch(uri.replace('ipfs://','https://cloudflare-ipfs.com/ipfs/')))
-      .then(r => {console.log(r); return r})
-      .then((res)  => res.body)
+      .then((res)  => { console.log(res); return res.body })
       .then((body) => {
         const reader = body.getReader()
         return new ReadableStream({
