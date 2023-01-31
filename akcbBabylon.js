@@ -56,7 +56,7 @@ akcbBabylon = (function() {
     let cameraAlpha  = options?.cameraAlpha  || -Math.PI / 2
     let cameraBeta   = options?.cameraBeta   ||  Math.PI / 2.5
     let cameraRadius = options?.cameraRadius || 10
-    let cameraTarget = options?.cameraTarget || new BABYLON.Vector3(0, 0, 0)
+    let cameraTarget = options?.cameraTarget || new BABYLON.Vector3(0, 1, 0)
     
     let cameraWheelPrecision       = options?.cameraWheelPrecision || 11
     let cameraRangeLowerProximity  = options?.cameraRangeLowerProximity || 5
