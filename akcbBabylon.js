@@ -144,7 +144,7 @@ akcbBabylon = (function() {
     // delete the previous AKCB
     if (model && model?.meshes) {
       model.meshes.forEach(mesh => {
-	mesh.dispose()
+        mesh.dispose()
       })
     }
     // push the new AKCB
