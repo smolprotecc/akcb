@@ -136,7 +136,9 @@ akcbBabylon = (function() {
     return scene
   }
 
-  let reloadAKCB = async function(asset) {
+  let reloadAKCB = async function(datum) {
+    console.log(datum)
+    let asset = datum.detail
     // delete the previous AKCB
 
     // push the new AKCB
