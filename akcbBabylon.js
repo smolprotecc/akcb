@@ -19,6 +19,9 @@ akcbBabylon = (function() {
 
     // create the engine
     engine = new BABYLON.Engine(canvas, false, {}, false)
+    // visual
+    engine.setHardwareScalingLevel(0.5)
+    engine.resize()
 
     // prevent gltf files from auto-playing
     BABYLON.SceneLoader.OnPluginActivatedObservable.add((e) => {
