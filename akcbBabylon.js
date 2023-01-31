@@ -5,6 +5,8 @@ akcbBabylon = (function() {
   let events = {
     newAKCBNumber: 'new-akcb-number',
   }
+  /* In-memory Variables */
+  let model;
 
   let setup = function(size) {
     // some statics
@@ -140,9 +142,14 @@ akcbBabylon = (function() {
     console.log(datum)
     let asset = datum.detail
     // delete the previous AKCB
-
+    if (model && model?.meshes) {
+      model.meshes.forEach(mesh => {
+	mesh.dispose()
+      })
+    }
     // push the new AKCB
-    await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
+    model = await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
+    console.log(model)
   }
 
   return {
