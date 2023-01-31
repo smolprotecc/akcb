@@ -118,14 +118,14 @@ akcbBabylon = (function() {
         const axes = new BABYLON.AxesViewer(scene, 5)
       }
     }
-    // const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
     let opts = {
       width  :15, 
       height :15, 
       // subdivisions: 10, 
       // maxHeight: 1
     }
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
+    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
     
     if (false) {
       engine.runRenderLoop(function() {
