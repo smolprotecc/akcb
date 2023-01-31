@@ -46,7 +46,7 @@ akcbPlaygrounds = (function() {
     if (which) {
       n = which
     } else {
-      n = numberInput.value
+      n = document.querySelector('#akcb-hud-number input').value
     }
     if (typeof n == 'string' && n.match(/\D+/)) { console.log('Non-digit request'); return false }
     
