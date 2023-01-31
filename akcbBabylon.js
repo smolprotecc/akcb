@@ -125,7 +125,7 @@ akcbBabylon = (function() {
       subdivisions: 10, 
       maxHeight: 1
     }
-    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heightMap.png', opts, scene);
+    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
     
     if (false) {
       engine.runRenderLoop(function() {
