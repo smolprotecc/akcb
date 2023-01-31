@@ -4,11 +4,8 @@ akcbPlaygrounds = (function() {
   let body; 
   // Statics
   let CSSIdentifier = 'akcb-playgrounds'
-  let glbURL        = 'https://ipfs.io/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
-  let metadataURL   = 'https://ipfs.io/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
-  
-  // cloudflare-ipfs.com
-  
+  let metadataURL   = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
+
   let events = {
     newAKCBNumber: 'new-akcb-number',
   }
@@ -16,9 +13,14 @@ akcbPlaygrounds = (function() {
   let raiseEvent = function(target, event, datum) { target.dispatchEvent(new CustomEvent(event, {detail: datum})) }
 
   let retrieve = async function(which) {
-    let url = glbURL.replace('FILENUMBER', which)
-    return await fetch(url)
-      .then((res) => res.body)
+    return await fetch(metadataURL.replace('FILENUMBER', which))
+      .then((res)  => res.json())
+      .then(r => {console.log(r); return r})
+      .then((data) => data.animation_url)
+      .then(r => {console.log(r); return r})
+      .then((uri)  => fetch(uri))
+      .then(r => {console.log(r); return r})
+      .then((res)  => res.body)
       .then((body) => {
         const reader = body.getReader()
         return new ReadableStream({
