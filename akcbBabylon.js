@@ -1,6 +1,10 @@
 
 akcbBabylon = (function() {
   let dev = true
+  /* Events */
+  let events = {
+    newAKCBNumber: 'new-akcb-number',
+  }
 
   let setup = function(size) {
     // some statics
@@ -23,6 +27,8 @@ akcbBabylon = (function() {
     
     // add event listeners
     window.addEventListener('resize', function() { engine.resize() })
+
+    body.addEventListener(events.newAKCBNumber, reloadAKCB)
   }
   
   let defaultScene = async function() {
@@ -112,7 +118,14 @@ akcbBabylon = (function() {
         const axes = new BABYLON.AxesViewer(scene, 5)
       }
     }
-    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    // const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    let options = {
+      width  :5, 
+      height :5, 
+      subdivisions: 10, 
+      maxHeight: 1
+    }
+    const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heightMap.png', options, scene);
     
     if (false) {
       engine.runRenderLoop(function() {
@@ -121,6 +134,13 @@ akcbBabylon = (function() {
     }
     
     return scene
+  }
+
+  let reloadAKCB = async function(asset) {
+    // delete the previous AKCB
+
+    // push the new AKCB
+    await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
   }
 
   return {
