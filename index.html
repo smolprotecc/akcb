@@ -26,52 +26,23 @@
   <canvas id="renderCanvas"></canvas>
 </body>
 <script>
-	
-let glbURL      = 'https://cloudflare-ipfs.com/ipfs/QmNRK6ijPiNmsKiGxVRhTGczUEAFmAGVMNCgZqN4wzTkrT/FILENUMBER.glb'
-let metadataURL = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
-	
+let initialID = 6262;
 let scene;
 		
 document.addEventListener("DOMContentLoaded", async function(event) {
+  // check for supplied id, slightly hacky but ehhh
+  let providedID = window.location.href.match(/\?id\=(\d+)/)
+  if (providedID) {
+    if (parseInt(providedID[1]) < 10000) {
+      initialID = parseInt(providedID[1])
+    }
+  }
+	
   akcbBabylon.setup()
   scene = await akcbBabylon.defaultScene()
 	
   akcbPlaygrounds.start()
-  let asset = await akcbPlaygrounds.update(6262)
-  
-  // await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
-
-  /*
-  let uri = glbURL.replace('FILENUMBER','6262')
-  let asset = await fetch(uri).then((res) => {
-    return res.body
-  }).then((body) => {
-    const reader = body.getReader()
-    return new ReadableStream({
-      start(controller) {
-        return pump()
-        function pump() {
-          return reader.read().then(({done, value}) => {
-            if (done) {
-              controller.close()
-              return
-            }
-            controller.enqueue(value)
-            return pump()
-          })
-        }
-      }
-    })
-  })
-  .then((stream) => new Response(stream))
-  .then((res) => res.blob())
-  .then((blob) => URL.createObjectURL(blob))
-  .then((url) => {
-     return url
-  })
-  
-  console.log(asset)
-  */
+  let asset = await akcbPlaygrounds.update(initialID)
 	
 })
 </script>
