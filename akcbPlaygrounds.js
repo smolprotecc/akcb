@@ -4,7 +4,8 @@ akcbPlaygrounds = (function() {
   let body; 
   // Statics
   let CSSIdentifier = 'akcb-playgrounds'
-  let metadataURL   = 'https://cloudflare-ipfs.com/ipfs/QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
+  let provider      = 'https://ipfs.io/ipfs/'
+  let metadataURL   = provider + 'QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
 
   let events = {
     newAKCBNumber: 'new-akcb-number',
@@ -16,7 +17,7 @@ akcbPlaygrounds = (function() {
     return await fetch(metadataURL.replace('FILENUMBER', which))
       .then((res)  => res.json())
       .then((data) => { console.log(data); return data.animation_url })
-      .then((uri)  => fetch(uri.replace('ipfs://','https://cloudflare-ipfs.com/ipfs/')))
+      .then((uri)  => fetch(uri.replace('ipfs://', provider)))
       .then((res)  => { console.log(res); return res.body })
       .then((body) => {
         const reader = body.getReader()
