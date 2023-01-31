@@ -193,6 +193,10 @@ akcbPlaygrounds = (function() {
   `
   let cssRules = `
     @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
+    canvas {
+     outline: none;
+     -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+    }
     .hidden {
       opacity: 0;
       pointer-events: none !important;
