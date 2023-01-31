@@ -138,13 +138,14 @@ akcbBabylon = (function() {
     return scene
   }
 
+  /*
   let asyncLoad = async function(root, file, scene) {
     return new Promise((res, rej) => {
-      BABYLON.SceneLoader.LoadAssetContainer(root, file, scene, function(container) {
+      BABYLON.SceneLoader.LoadAssetContainerAsync(root, file, scene, function(container) {
         res(container)
       })
     })
-  }
+  }*/
 
   let reloadAKCB = async function(datum) {
     console.log(datum)
@@ -157,7 +158,7 @@ akcbBabylon = (function() {
     }
     // push the new AKCB
     // model = await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
-    model = await asyncLoad(asset, undefined, scene)
+    model = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
     console.log(model)
     model.addAllToScene()
   }
