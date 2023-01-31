@@ -157,7 +157,7 @@ akcbBabylon = (function() {
     }
     // push the new AKCB
     // model = await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
-    model = await asyncLoad('', asset, scene)
+    model = await asyncLoad(asset, undefined, scene)
     console.log(model)
     model.addAllToScene()
   }
