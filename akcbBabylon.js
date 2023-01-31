@@ -54,17 +54,18 @@ akcbBabylon = (function() {
     
     // All camera options
     let cameraAlpha  = options?.cameraAlpha  || -Math.PI / 2
-    let cameraBeta   = options?.cameraBeta   || Math.PI / 2.5
+    let cameraBeta   = options?.cameraBeta   ||  Math.PI / 2.5
     let cameraRadius = options?.cameraRadius || 10
     let cameraTarget = options?.cameraTarget || new BABYLON.Vector3(0, 0, 0)
     
     let cameraWheelPrecision       = options?.cameraWheelPrecision || 11
     let cameraRangeLowerProximity  = options?.cameraRangeLowerProximity || 5
     let cameraRangeHigherProximity = options?.cameraRangeHigherProximity || 135
-    let cameraStartPosition        = options?.cameraStartPosition || new BABYLON.Vector3(-2.25,2.5,7.0)
+    let cameraStartPosition        = options?.cameraStartPosition || new BABYLON.Vector3( -1.727, 2.377, 4.974 )
     
     // All camera instructions
     let camera = new BABYLON.ArcRotateCamera('viewport', cameraAlpha, cameraBeta, cameraRadius, cameraTarget)
+console.log(camera)
     // Attach camera to canvas
     camera.attachControl(canvas, true, false, 0)
     // Adjust the camera movements
@@ -124,6 +125,7 @@ akcbBabylon = (function() {
       }
     }
     const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+          ground.receiveShadows = true;
     let opts = {
       width  :15, 
       height :15, 
@@ -132,6 +134,12 @@ akcbBabylon = (function() {
     }
     // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
     
+    // Make a light
+    const dirlight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(1, -1, 0), scene);
+    dirlight.position = new BABYLON.Vector3(0, 8, -11);
+    // Shadow generator
+    shadowGenerator = new BABYLON.ShadowGenerator(1024, dirlight);
+
     if (false) {
       engine.runRenderLoop(function() {
         camera.alpha += 0.001
@@ -141,29 +149,28 @@ akcbBabylon = (function() {
     return scene
   }
 
-  /*
-  let asyncLoad = async function(root, file, scene) {
-    return new Promise((res, rej) => {
-      BABYLON.SceneLoader.LoadAssetContainerAsync(root, file, scene, function(container) {
-        res(container)
-      })
-    })
-  }*/
 
   let reloadAKCB = async function(datum) {
     console.log(datum)
     let asset = datum.detail
     // delete the previous AKCB
-    if (model && model?.meshes) {
-      model.meshes.forEach(mesh => {
-	    mesh.dispose()
-      })
-    }
+    let roots = scene.meshes.filter(item => item.id == '__root__')
+    roots.forEach(root => {
+      root.dispose()
+    })
+
     // push the new AKCB
-    // model = await BABYLON.SceneLoader.AppendAsync(asset, undefined, scene, undefined, ".glb")
     model = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
     console.log(model)
     model.addAllToScene()
+
+    // grab internal reference
+    let __root__ = scene.meshes.filter(item => item.id === '__root__')
+    if (__root__.length > 0) { __root__ = __root__[0] }
+    console.log(__root__)
+
+    // add shadow
+    shadowGenerator.addShadowCaster(__root__, true);
   }
 
   return {
