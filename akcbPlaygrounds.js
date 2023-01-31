@@ -53,7 +53,7 @@ akcbPlaygrounds = (function() {
     let datum = await retrieve(n)
     console.log(datum)
 
-    raiseEvent(body, events.newAKCBNumber, numberInput.value) 
+    raiseEvent(body, events.newAKCBNumber, datum) 
   }
 
   let markup = `
