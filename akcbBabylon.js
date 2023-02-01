@@ -229,7 +229,7 @@ console.log(camera)
     console.log(floor)
     floor.addAllToScene()
 
-    let root = floor.meshes.filter(item => item.id == '__root__')
+    let root = floor.meshes.filter(item => item.id == '__root__')[0]
 console.log(root)
     root.receiveShadows = true;
     if (root && detail) {
