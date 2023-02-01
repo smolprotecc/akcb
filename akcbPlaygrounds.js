@@ -86,7 +86,7 @@ akcbPlaygrounds = (function() {
 
   let retrieveFloor = async function() {
     raiseEvent(body, events.loadingFloorStart)
-    let uri = floors[floorPosition].file
+    let uri = 'environment/' + floors[floorPosition].file
     return await retrieve(uri)
       .then((url)  => {
         raiseEvent(body, events.reloadFloor, url) 
