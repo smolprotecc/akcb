@@ -218,12 +218,27 @@ console.log(camera)
   }
 
   let reloadFloor = async function(datum) {
-    let asset = datum.detail
+    let asset  = datum.detail[0]
+    let detail = datum.detail[1]
+    console.log(datum)
     
     let floor = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
     console.log(floor)
     floor.addAllToScene()
-    
+
+    let root = floor.meshes.filter(item => item.id == '__root__')
+console.log(root)
+    if (root && detail) {
+      if (detail.scale) {
+        root.scaling = new BABYLON.Vector3( detail.scale, detail.scale, detail.scale )
+      }
+      if (detail.rotation) {
+        root.rotation.y = detail.rotation
+      }
+      if (detail.y) {
+        root.position.y = detail.y
+      }
+    }
   }
 
   return {
