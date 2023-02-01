@@ -38,6 +38,9 @@ akcbPlaygrounds = (function() {
    file: 'castle_stone_floor.glb',
    url : 'https://sketchfab.com/3d-models/castle-stone-floor-68ddb29e025e43f7ae0993010b7dd7cb',
    auth: 'Paul (paul3uk)',
+   scale   : 0.3,
+   rotation: -Math.PI/2,
+   y       : -0.4,
   },
   ]
 
@@ -89,7 +92,7 @@ akcbPlaygrounds = (function() {
     let uri = 'environment/' + floors[floorPosition].file
     return await retrieve(uri)
       .then((url)  => {
-        raiseEvent(body, events.reloadFloor, url) 
+        raiseEvent(body, events.reloadFloor, [url, floors[floorPosition]]) 
         raiseEvent(body, events.loadingFloorComplete)
         return url
       })
