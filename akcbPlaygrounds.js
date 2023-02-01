@@ -51,6 +51,9 @@ akcbPlaygrounds = (function() {
     newAKCBNumber: 'new-akcb-number',
     loadingModelStart   : 'loading-model-start',
     loadingModelComplete: 'loading-model-complete',
+    reloadFloor         : 'reload-floor',
+    loadingFloorStart   : 'loading-floor-start',
+    loadingFloorComplete: 'loading-floor-complete',
   }
 
   let raiseEvent = function(target, event, datum) { target.dispatchEvent(new CustomEvent(event, {detail: datum})) }
@@ -81,6 +84,17 @@ akcbPlaygrounds = (function() {
     }
   }
 
+  let retrieveFloor = async function() {
+    raiseEvent(body, events.loadingFloorStart)
+    let uri = floors[floorPosition].file
+    return await retrieve(uri)
+      .then((url)  => {
+        raiseEvent(body, events.reloadFloor, url) 
+        raiseEvent(body, events.loadingFloorComplete)
+        return url
+      })
+  }
+
   let updateFloor = function(dir) {
     if (dir == 'right') {
       floorPosition++
@@ -91,6 +105,7 @@ akcbPlaygrounds = (function() {
     }
     let floor = floors[floorPosition]
     console.log(floor)
+    retrieveFloor()
   }
 
   let toggleHUD = function() {
@@ -135,6 +150,14 @@ akcbPlaygrounds = (function() {
       output += template.replace(/REPLACELABEL/g, item.trait_type).replace(/REPLACEITEM/g, item.value)
     })
     contentPanel.insertAdjacentHTML('beforeend', output)
+  }
+
+  let loadingFloorStart = function() {
+
+  }
+
+  let loadingFloorComplete = function() {
+
   }
 
   let loadingModelStart = function() {
@@ -624,6 +647,8 @@ akcbPlaygrounds = (function() {
     
     document.querySelector('body').addEventListener(events.loadingModelStart,    loadingModelStart   )
     document.querySelector('body').addEventListener(events.loadingModelComplete, loadingModelComplete)
+    document.querySelector('body').addEventListener(events.loadingFloorStart,    loadingFloorStart   )
+    document.querySelector('body').addEventListener(events.loadingFloorComplete, loadingFloorComplete)
 
     // button styling
     document.querySelector('#akcb-minimise-button').addEventListener('click', function() {
