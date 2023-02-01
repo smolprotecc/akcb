@@ -1,6 +1,7 @@
 /*
    credits:
      close button - https://codepen.io/JeromeRenders/pen/GqjxVL
+     arrows       - https://codepen.io/varystrategic/pen/zGrMQK
  */
 
 akcbPlaygrounds = (function() {
@@ -12,10 +13,39 @@ akcbPlaygrounds = (function() {
   let metadataURL   = provider + 'QmRiP1c1j5Lobzb6SpP5pJfC1kyHjnGyGNRg5kfgiUTgSD/FILENUMBER'
   let marketplaceURL= 'https://opensea.io/collection/akidcalledbeast?search[sortAscending]=true&search[sortBy]=UNIT_PRICE&search[stringTraits][0][name]=REPLACELABEL&search[stringTraits][0][values][0]=REPLACEITEM'
 
+  let floors = [
+  {name: 'floor',
+   file: 'issa_floor.glb',
+   url : 'https://sketchfab.com/3d-models/issa-floor-3b4cce01aff84d4498cd2d405e74d970',
+   auth: 'nasimi',
+  },
+  {name: 'marble',
+   file: 'marble_tile_floors.glb',
+   url : 'https://sketchfab.com/3d-models/marble-tile-floors-9317c3a26b00470d9a0e3cb000607a87',
+   auth: 'berg.holmgren',
+  },
+  {name: 'stein',
+   file: 'stein_low_fbx.glb',
+   url : 'https://sketchfab.com/3d-models/stein-low-fbx-553bc76396af4af2bf8a334d815935df',
+   auth: 'EvenBridge',
+  },
+  {name: 'tile',
+   file: 'tile.glb',
+   url : 'https://sketchfab.com/3d-models/tile-3762fe67374949838d948766cb1ddb65',
+   auth: 'Lusans2002',
+  },
+  {name: 'castle',
+   file: 'castle_stone_floor.glb',
+   url : 'https://sketchfab.com/3d-models/castle-stone-floor-68ddb29e025e43f7ae0993010b7dd7cb',
+   auth: 'Paul (paul3uk)',
+  },
+  ]
+
   // Computational/State
   let interactable  = true
   let details;
   let attributePriority = ['DNA', 'Beasthood'] // not sure why this is inverted but we will get what we want: Beasthood > DNA
+  let floorPosition = 0
 
   let events = {
     newAKCBNumber: 'new-akcb-number',
@@ -49,6 +79,18 @@ akcbPlaygrounds = (function() {
         }
         return 0;
     }
+  }
+
+  let updateFloor = function(dir) {
+    if (dir == 'right') {
+      floorPosition++
+      if (floorPosition >= floors.length) { floorPosition = 0 }
+    } else if (dir == 'left') {
+      floorPosition--
+      if (floorPosition < 0) { floorPosition = floors.length - 1 }
+    }
+    let floor = floors[floorPosition]
+    console.log(floor)
   }
 
   let toggleHUD = function() {
@@ -123,13 +165,8 @@ akcbPlaygrounds = (function() {
     details = data
   }
 
-  let retrieve = async function(which) {
-    raiseEvent(body, events.loadingModelStart)
-    return await fetch(metadataURL.replace('FILENUMBER', which))
-      .then((res)  => res.json())
-      .then((data) => { remember(data); return data })
-      .then((data) => { console.log(data); return data.animation_url })
-      .then((uri)  => fetch(uri.replace('ipfs://', provider)))
+  let retrieve = async function(url) {
+    return await fetch(url)
       .then((res)  => { console.log(res); return res.body })
       .then((body) => {
         const reader = body.getReader()
@@ -152,9 +189,18 @@ akcbPlaygrounds = (function() {
       .then((stream) => new Response(stream))
       .then((res)  => res.blob())
       .then((blob) => URL.createObjectURL(blob))
-      .then((url)  => { 
-         raiseEvent(body, events.loadingModelComplete)
-         return url 
+  }
+
+  let retrieveAKCB = async function(which) {
+    raiseEvent(body, events.loadingModelStart)
+    return await fetch(metadataURL.replace('FILENUMBER', which))
+      .then((res)  => res.json())
+      .then((data) => { remember(data); return data })
+      .then((data) => { console.log(data); return data.animation_url })
+      .then((uri)  => retrieve(uri.replace('ipfs://', provider)))
+      .then((url)  => {
+        raiseEvent(body, events.loadingModelComplete)
+        return url
       })
   }
 
@@ -169,7 +215,7 @@ akcbPlaygrounds = (function() {
     if (typeof n == 'string' && n.match(/\D+/)) { console.log('Non-digit request'); return false }
     if (typeof n == 'string' && n.length <= 0)  { console.log('Too short'); return false }
     
-    let datum = await retrieve(n)
+    let datum = await retrieveAKCB(n)
     console.log(datum)
 
     raiseEvent(body, events.newAKCBNumber, datum) 
@@ -188,6 +234,11 @@ akcbPlaygrounds = (function() {
     <div id='akcb-minimise'>
       <div id='akcb-minimise-background'></div>
       <button id='akcb-minimise-button' class='on' onclick='akcbPlaygrounds.toggleHUD()'><span></span><span></span><span></span></button>
+    </div>
+    <!-- Floor arrows -->
+    <div id='akcb-floors'>
+      <a href='#' class='akcb-arrow left'  onclick='akcbPlaygrounds.updateFloor(\"left\")'></a>
+      <a href='#' class='akcb-arrow right' onclick='akcbPlaygrounds.updateFloor(\"right\")'></a>
     </div>
     </div>
   `
@@ -495,6 +546,51 @@ akcbPlaygrounds = (function() {
       30% { transform: translate(-50%, -50%) rotate(0deg); }
      100% { transform: translate(-50%, 200%); }
     }
+
+    #akcb-floors {
+      pointer-events: all;
+      position: absolute;
+      bottom  : 30px;
+      right   : 1.4em;
+      width   : 11vmin;
+      height  : 5vmin;
+
+      /* styling */
+      font-size : 16pt;
+      font-family: 'Nunito Sans', sans-serif;
+    }
+    .akcb-arrow {
+     position: absolute;
+     top: 50%;
+     width: 3vmin;
+     height: 3vmin;
+     background: transparent;
+     border-top: 1vmin solid white;
+     border-right: 1vmin solid white;
+     box-shadow: 0 0 0 lightgray;
+     transition: all 200ms ease;
+    }
+    .akcb-arrow.left {
+     left: 0;
+     transform: translate3d(0, -50%, 0) rotate(-135deg);
+    }
+    .akcb-arrow.right {
+     right: 0;
+     transform: translate3d(0, -50%, 0) rotate(  45deg);
+    }
+    .akcb-arrow:hover {
+     border-color: orange;
+     box-shadow: 0.5vmin -0.5vmin 0 white;
+    }
+    .akcb-arrow:before {
+     content: "";
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-40%, -60%) rotate(45deg);
+     width: 200%;
+     height: 200%;
+    }
   `
 
   let addCSS = function(rule, container, ruleIdentifier) {
@@ -547,7 +643,9 @@ akcbPlaygrounds = (function() {
     start : start,
     render: render,
     update: update,
-    searchFor: searchFor,
-    toggleHUD: toggleHUD,
+    
+    searchFor  : searchFor,
+    toggleHUD  : toggleHUD,
+    updateFloor: updateFloor,
   }
 })()
