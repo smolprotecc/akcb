@@ -4,10 +4,10 @@ akcbBabylon = (function() {
   /* Events */
   let events = {
     newAKCBNumber: 'new-akcb-number',
+    reloadFloor  : 'reload-floor',
   }
   /* In-memory Variables */
   let model;
-  let ground;
 
   let setup = function(size) {
     // some statics
@@ -35,6 +35,7 @@ akcbBabylon = (function() {
     window.addEventListener('resize', function() { engine.resize() })
 
     body.addEventListener(events.newAKCBNumber, reloadAKCB)
+    body.addEventListener(events.reloadFloor,   reloadFloor)
   }
   
   let defaultScene = async function() {
@@ -125,8 +126,8 @@ console.log(camera)
         const axes = new BABYLON.AxesViewer(scene, 5)
       }
     }
-    ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
-    ground.receiveShadows = true;
+    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+          ground.receiveShadows = true;
     let opts = {
       width  :15, 
       height :15, 
@@ -172,16 +173,17 @@ console.log(camera)
 
     // add shadow
     shadowGenerator.addShadowCaster(__root__, true);
-reloadBackground()
+
+    // 
+// reloadBackground()
   }
-  
-  
+
   let reloadBackground = async function(datum) {
     let asset = datum
     // delete the previous background
 
     // raiseEvent(body, events.loadingModelStart)
-    let data = await fetch('minimalistic_modern_bedroom.glb')
+    let data = await fetch('https://github.com/smolprotecc/akcb/blob/31bf51dc4f457f31472f19d40166ed097dab07f5/minimalistic_modern_bedroom.glb')
       .then((res)  => { console.log(res); return res.body })
       .then((body) => {
         const reader = body.getReader()
@@ -213,18 +215,15 @@ reloadBackground()
     let background = await BABYLON.SceneLoader.LoadAssetContainerAsync(data, undefined, scene, undefined, '.glb')
     console.log(background)
     background.addAllToScene()
-	  
-    let rootBackground = background.meshes.filter(item => item.id == '__root__')[0]
-    rootBackground.position.y = 4
-    rootBackground.scaling = new BABYLON.Vector3(2.35, 2.35, 2.35)
-	  
-    for (var i = 0; i < background.meshes.length; i++) {
-      let mesh = background.meshes[i]
-      mesh.receiveShadows = true
-    }
-	  
-    //
-    ground.dispose()
+  }
+
+  let reloadFloor = async function(datum) {
+    let asset = datum.detail
+    
+    let floor = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
+    console.log(floor)
+    floor.addAllToScene()
+    
   }
 
   return {
