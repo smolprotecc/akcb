@@ -8,6 +8,7 @@ akcbBabylon = (function() {
   }
   /* In-memory Variables */
   let model;
+  let ground;
 
   let setup = function(size) {
     // some statics
@@ -126,8 +127,9 @@ console.log(camera)
         const axes = new BABYLON.AxesViewer(scene, 5)
       }
     }
-    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
-          ground.receiveShadows = true;
+    ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    ground.receiveShadows = true;
+    /*
     let opts = {
       width  :15, 
       height :15, 
@@ -135,6 +137,7 @@ console.log(camera)
       // maxHeight: 1
     }
     // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
+    */
     
     // Make a light
     const dirlight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(1, -1, 0), scene);
@@ -226,8 +229,9 @@ console.log(camera)
     console.log(floor)
     floor.addAllToScene()
 
-    let root = floor.meshes.filter(item => item.id == '__root__')[0]
+    let root = floor.meshes.filter(item => item.id == '__root__')
 console.log(root)
+    root.receiveShadows = true;
     if (root && detail) {
       if (detail.scale) {
         root.scaling = new BABYLON.Vector3( detail.scale, detail.scale, detail.scale )
@@ -239,6 +243,8 @@ console.log(root)
         root.position.y = detail.y
       }
     }
+
+    ground.dispose()
   }
 
   return {
