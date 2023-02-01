@@ -129,6 +129,9 @@ console.log(camera)
     }
     ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
     ground.receiveShadows = true;
+    // add akcb tag
+    ground.akcbTag = 'floor'
+	  
     /*
     let opts = {
       width  :15, 
@@ -221,17 +224,27 @@ console.log(camera)
   }
 
   let reloadFloor = async function(datum) {
+    // remove previous floor
+    let m = scene.meshes.filter(item => item.akcbTag && item.akcbTag == 'floor')
+    if (m.length > 0) {
+      m[0].dispose()
+    }
+
+    // split the data
     let asset  = datum.detail[0]
     let detail = datum.detail[1]
-    console.log(datum)
     
+    // preload the mesh
     let floor = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
-    console.log(floor)
-    floor.addAllToScene()
+    // assign handler and add akcb tag
+    let root  = floor.meshes.filter(item => item.id == '__root__')[0]
+        root.akcbTag = 'floor'
 
-    let root = floor.meshes.filter(item => item.id == '__root__')[0]
-console.log(root)
+    // add to scene
+    floor.addAllToScene()
+    // add shadows
     root.receiveShadows = true;
+    // perform transformations
     if (root && detail) {
       if (detail.scale) {
         root.scaling = new BABYLON.Vector3( detail.scale, detail.scale, detail.scale )
@@ -243,8 +256,6 @@ console.log(root)
         root.position.y = detail.y
       }
     }
-
-    ground.dispose()
   }
 
   return {
