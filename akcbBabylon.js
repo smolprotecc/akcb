@@ -1,6 +1,8 @@
 
 akcbBabylon = (function() {
   let dev = true
+  /* Meta variables */
+
   /* Events */
   let events = {
     newAKCBNumber: 'new-akcb-number',
@@ -9,6 +11,8 @@ akcbBabylon = (function() {
   /* In-memory Variables */
   let model;
   let ground;
+  let akcbGroundTag = 'ground';
+  /* Computational */
 
   let setup = function(size) {
     // some statics
@@ -130,17 +134,7 @@ console.log(camera)
     ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
     ground.receiveShadows = true;
     // add akcb tag
-    ground.akcbTag = 'floor'
-	  
-    /*
-    let opts = {
-      width  :15, 
-      height :15, 
-      // subdivisions: 10, 
-      // maxHeight: 1
-    }
-    // const ground = BABYLON.MeshBuilder.CreateGroundFromHeightMap('ground', 'heights.png', opts, scene);
-    */
+    ground.akcbTag = akcbGroundTag
     
     // Make a light
     const dirlight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(1, -1, 0), scene);
@@ -225,7 +219,7 @@ console.log(camera)
 
   let reloadFloor = async function(datum) {
     // remove previous floor
-    let m = scene.meshes.filter(item => item.akcbTag && item.akcbTag == 'floor')
+    let m = scene.meshes.filter(item => item.akcbTag && item.akcbTag == akcbGroundTag)
     if (m.length > 0) {
       m[0].dispose()
     }
@@ -238,7 +232,7 @@ console.log(camera)
     let floor = await BABYLON.SceneLoader.LoadAssetContainerAsync(asset, undefined, scene, undefined, '.glb')
     // assign handler and add akcb tag
     let root  = floor.meshes.filter(item => item.id == '__root__')[0]
-        root.akcbTag = 'floor'
+        root.akcbTag = akcbGroundTag
 
     // add to scene
     floor.addAllToScene()
