@@ -7,6 +7,7 @@ akcbBabylon = (function() {
   }
   /* In-memory Variables */
   let model;
+  let ground;
 
   let setup = function(size) {
     // some statics
@@ -124,8 +125,8 @@ console.log(camera)
         const axes = new BABYLON.AxesViewer(scene, 5)
       }
     }
-    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
-          ground.receiveShadows = true;
+    ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 6, height: 6}, scene);
+    ground.receiveShadows = true;
     let opts = {
       width  :15, 
       height :15, 
@@ -213,9 +214,17 @@ reloadBackground()
     console.log(background)
     background.addAllToScene()
 	  
-    let rootBackground = background.meshes.filter(item => item.id == '__root__')
+    let rootBackground = background.meshes.filter(item => item.id == '__root__')[0]
     rootBackground.position.y = 4
     rootBackground.scaling = new BABYLON.Vector3(2.35, 2.35, 2.35)
+	  
+    for (var i = 0; i < background.meshes.length; i++) {
+      let mesh = background.meshes[i]
+      mesh.receiveShadows = true
+    }
+	  
+    //
+    ground.dispose()
   }
 
   return {
