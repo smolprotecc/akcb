@@ -171,6 +171,47 @@ console.log(camera)
 
     // add shadow
     shadowGenerator.addShadowCaster(__root__, true);
+reloadBackground()
+  }
+  
+  
+  let reloadBackground = async function(datum) {
+    let asset = datum
+    // delete the previous background
+
+    // raiseEvent(body, events.loadingModelStart)
+    let data = await fetch('minimalistic_modern_bedroom.glb')
+      .then((res)  => { console.log(res); return res.body })
+      .then((body) => {
+        const reader = body.getReader()
+        return new ReadableStream({
+          start(controller) {
+            return pump()
+            function pump() {
+              return reader.read().then(({done, value}) => {
+                if (done) {
+                  controller.close()
+                  return
+                }
+                controller.enqueue(value)
+                return pump()
+              })
+            }
+          }
+        })
+      })
+      .then((stream) => new Response(stream))
+      .then((res)  => res.blob())
+      .then((blob) => URL.createObjectURL(blob))
+      .then((url)  => { 
+         // raiseEvent(body, events.loadingModelComplete)
+         return url 
+      })
+
+    // push the new background
+    let background = await BABYLON.SceneLoader.LoadAssetContainerAsync(data, undefined, scene, undefined, '.glb')
+    console.log(background)
+    background.addAllToScene()
   }
 
   return {
