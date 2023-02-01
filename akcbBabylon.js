@@ -212,6 +212,10 @@ reloadBackground()
     let background = await BABYLON.SceneLoader.LoadAssetContainerAsync(data, undefined, scene, undefined, '.glb')
     console.log(background)
     background.addAllToScene()
+	  
+    let rootBackground = background.meshes.filter(item => item.id == '__root__')
+    rootBackground.position.y = 4
+    rootBackground.scaling = new BABYLON.Vector3(2.35, 2.35, 2.35)
   }
 
   return {
